@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
+</head>
+<body>
+    <h1>Socket Testing</h1>
+    <input type="number" id="zoomInput">
+    <button onclick="serverCall()">Server</button>
+    <button onclick="slotCheck()">Slot Check</button>
+    <script>
+        var socket=io.connect('http://localhost:3000');
+        socket.on('connect', ()=>{
+            console.log("Connected TO Server Sockets..");
+            socket.emit('join-user-stream', {
+                userId:2,
+                userAccessToken:"2p9UcRgEU9gq1vfEvrz9kzRBmYC2"
+            });
+            serverCall();
+        });
+
+        socket.on("notification-update", function(data){
+            console.log(data);
+        });
+
+        socket.on("transaction-update", function(data){
+            console.log(data);
+        });
+
+        socket.on("user-parking-update", function(data){
+            console.log(data);
+        });
+
+        socket.on("slot-update", function(data){
+            console.log(data);
+        });
+
+        var serverCall=function(){
+            socket.emit('CameraPosition-change', {
+                socketId:socket.id,
+                userId:2,
+                latitude:22.078336,
+                longitude:82.168583,
+                zoom:document.querySelector('#zoomInput').value
+            });
+        }
+
+        var slotCheck=function(){
+            socket.emit('slot-socket-check', {
+                slotId:41
+            });
+        }
+    </script>
+</body>
+</html>
